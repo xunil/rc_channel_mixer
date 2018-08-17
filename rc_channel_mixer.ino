@@ -108,6 +108,10 @@ void loop() {
   Serial.println(steering_max);
 #endif
 
-  analogWrite(A8, left_wheel_speed);
+#if defined(__MK66FX1M0__) // Teensy 3.6
+  analogWrite(A21, left_wheel_speed); // output to DACs
+  analogWrite(A22, right_wheel_speed);
+#endif
+  analogWrite(A8, left_wheel_speed); // output to PWM pins just for giggles
   analogWrite(A9, right_wheel_speed);
 }
