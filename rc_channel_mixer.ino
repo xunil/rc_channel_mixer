@@ -1,5 +1,7 @@
 #define DEBUG 1
 
+const int LED_PIN = 13;
+int led_state = 1;
 // RC channel mixer for the ROBOT.
 const int THROTTLE_PIN = 12;
 const int STEERING_PIN = 11;
@@ -26,13 +28,20 @@ const float A = 1.05;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, led_state);
   pinMode(THROTTLE_PIN, INPUT);
   pinMode(STEERING_PIN, INPUT);
 
   pinMode(A8, OUTPUT);
   pinMode(A9, OUTPUT);
+#if defined(__MK66FX1M0__) // Teensy 3.6
+  pinMode(A21, OUTPUT);
+  pinMode(A22, OUTPUT);
+#endif
 
   analogWriteFrequency(22, 11718.75); // pin 23 (A9) also changes
+  analogWriteFrequency(A21, 11718.75);
   analogWriteResolution(12);
 }
 
@@ -114,4 +123,9 @@ void loop() {
 #endif
   analogWrite(A8, left_wheel_speed); // output to PWM pins just for giggles
   analogWrite(A9, right_wheel_speed);
+  long now = millis();
+  if ((now % 100) == 0) {
+    led_state = !led_state;
+    digitalWrite(LED_PIN, led_state);
+  }
 }
