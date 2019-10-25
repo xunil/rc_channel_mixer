@@ -31,6 +31,10 @@ void setup() {
 
   pinMode(A8, OUTPUT);
   pinMode(A9, OUTPUT);
+#if defined(__MK66FX1M0__) // Teensy 3.6
+  pinMode(A21, OUTPUT);
+  pinMode(A22, OUTPUT);
+#endif
 
   analogWriteFrequency(22, 11718.75); // pin 23 (A9) also changes
   analogWriteResolution(12);
